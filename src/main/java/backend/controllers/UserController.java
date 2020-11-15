@@ -15,7 +15,6 @@ public class UserController {
     @POST
     public Response insertUser(@FormParam("name") String name, @FormParam("pass")
             String pass){
-        System.out.println(name+pass);
         User user = new User(name,pass);
         try {
             userService.registerUser(user);

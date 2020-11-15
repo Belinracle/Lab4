@@ -1,6 +1,5 @@
 package backend.services;
 
-import backend.DAO.Implementations.UserDaoImpl;
 import backend.DAO.interfaces.UserDao;
 import backend.entity.User;
 import org.apache.logging.log4j.LogManager;
@@ -25,5 +24,7 @@ public class UserService {
         }
         return user;
     }
-
+    public User findUserByName(String username){
+        return userDao.getByName(username);
+    }
 }

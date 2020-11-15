@@ -4,12 +4,17 @@ import backend.DAO.interfaces.PointDao;
 import backend.entity.Point;
 import backend.entity.User;
 
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.Transactional;
 import java.util.List;
 
+@Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class PointDaoImpl implements PointDao {
 
     @PersistenceUnit(name = "postgres")
