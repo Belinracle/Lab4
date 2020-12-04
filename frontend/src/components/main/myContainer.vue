@@ -1,10 +1,10 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid ">
     <div class="row justify-content-center">
       <my-picture/>
       <my-form/>
     </div>
-    <my-table/>
+    <my-table />
   </div>
 </template>
 
@@ -24,5 +24,7 @@ export default {
 </script>
 
 <style scoped>
+div{
 
+}
 </style>

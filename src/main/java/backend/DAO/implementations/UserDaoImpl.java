@@ -1,6 +1,7 @@
 package backend.DAO.implementations;
 
 import backend.DAO.interfaces.UserDao;
+import backend.entity.Point;
 import backend.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +30,6 @@ public class UserDaoImpl implements UserDao {
             em.persist(user);
             log.info(String.format("Пользователь %s успешно зарегистрирован",user.getName()));
         }catch(Exception e ){
-//                System.out.println(e.getMessage()+"       "+e.getCause());
             log.warn(String.format("кто то попытался зарегистрироваться, но пользователь %s уже существует", user.getName()));
             throw new Exception(String.format("Пользователь %s уже существует", user.getName()));
         }
@@ -40,5 +40,13 @@ public class UserDaoImpl implements UserDao {
     public User getByName(String name) {
         EntityManager em = entityManagerFactory.createEntityManager();
         return em.createNamedQuery(User.GET_BY_NAME,User.class).setParameter("name",name).getSingleResult();
+    }
+
+    @Override
+    @Transactional
+    public User update(String name, Point point) {
+        User user = getByName(name);
+        user.getPoints().add(point);
+        return user;
     }
 }

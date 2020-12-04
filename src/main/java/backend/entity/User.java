@@ -1,6 +1,7 @@
 package backend.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,8 +19,8 @@ public class User {
     private String name;
     private String pass;
 
-    @OneToMany(mappedBy = "username")
-    private List<Point> points;
+    @OneToMany
+    private List<Point> points = new ArrayList<>();
 
     public User() { }
     public User(String username,String usrPass){

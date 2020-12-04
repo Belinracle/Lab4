@@ -1,4 +1,4 @@
-package backend.services;
+package backend.services.point;
 
 import javax.ejb.Stateless;
 import java.util.List;

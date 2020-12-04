@@ -22,6 +22,7 @@ public class RestEasyConfig extends Application{
         singletons.add(corsFilter);
 
         classes.add(UserController.class);
+        classes.add(PointsController.class);
     }
 
     @Override

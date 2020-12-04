@@ -1,6 +1,5 @@
 package backend.services;
 
-
 import backend.DAO.interfaces.PointDao;
 import backend.entity.Point;
 

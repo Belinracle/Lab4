@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="main" class="d-flex flex-column">
     <Header/>
     <my-container/>
     <router-link to="/">start</router-link>
@@ -22,5 +22,7 @@ export default {
 </script>
 
 <style scoped>
-
+#main{
+  height: 100%;
+}
 </style>
