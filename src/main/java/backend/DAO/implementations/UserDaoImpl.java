@@ -37,10 +37,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getByName(String name) throws Exception {
+    public User getByName(String name) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        User user = (User)em.createNamedQuery(User.GET_BY_NAME,User.class).setParameter("name",name);
-        if (user==null) throw new Exception(String.format("Пользователь с именем %s отсутствует в базе", name));
-        return user;
+        return em.createNamedQuery(User.GET_BY_NAME,User.class).setParameter("name",name).getSingleResult();
     }
 }

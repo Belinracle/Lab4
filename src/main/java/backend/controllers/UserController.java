@@ -6,9 +6,11 @@ import backend.services.UserService;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("users")
+@Consumes(MediaType.APPLICATION_JSON)
 public class UserController {
     @EJB
     UserService userService;
@@ -16,9 +18,7 @@ public class UserController {
     TokenService tokenService;
 
     @POST
-    public Response insertUser(@FormParam("name") String name, @FormParam("pass")
-            String pass){
-        User user = new User(name,pass);
+    public Response insertUser(User user){
         try {
             userService.registerUser(user);
             return Response.ok().build();
@@ -27,16 +27,15 @@ public class UserController {
         }
     }
 
-    @GET
+    @POST
     @Path("/login")
-    public Response authenticate(@FormParam("login") String login,
-                                 @FormParam("password") String password){
+    public Response authenticate(User user){
         try {
-            userService.authenticate(login, password);
+            userService.authenticate(user.getName(), user.getPass());
         }catch(Exception e){
             return Response.serverError().entity(e.getMessage()).build();
         }
-        String token = tokenService.issueToken(login);
+        String token = tokenService.issueToken(user.getName());
         return Response.ok().entity(token).build();
     }
 }

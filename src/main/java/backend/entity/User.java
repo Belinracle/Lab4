@@ -13,7 +13,7 @@ import java.util.List;
 public class User {
 
     public static final String GET_BY_NAME = "GET_BY_NAME";
-    static final String GET_BY_NAME_QUERY = "SELECT dolbaeb from dolbaebs dolbaeb where dolbaeb.name = :name";
+    static final String GET_BY_NAME_QUERY = "SELECT dolbaeb from User dolbaeb where dolbaeb.name = :name";
     @Id
     private String name;
     private String pass;

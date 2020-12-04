@@ -28,7 +28,10 @@ public class UserService {
         return userDao.getByName(username);
     }
     public void authenticate(String name, String password)throws Exception {
-        User user = findUserByName(name);
-        if (!(user.getPass().equals(password))) throw new Exception("Пароли не совпадают");
+        User user;
+        try {
+            user = findUserByName(name);
+        } catch(Exception e ){ throw new Exception(String.format("Пользователь с именем %s отсутствует в базе", name));}
+        if (!user.getPass().equals(password)) throw new Exception("Пароли не совпадают");
     }
 }

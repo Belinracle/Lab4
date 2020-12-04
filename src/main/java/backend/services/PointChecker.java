@@ -1,7 +1,6 @@
 package backend.services;
 
 import javax.ejb.Stateless;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -17,7 +16,7 @@ public class PointChecker {
         StringBuilder sb =  new StringBuilder();
         sb.append("[");
         for(Double i : list){
-            sb.append(String.format("'%d',",i));
+            sb.append(String.format("'%f',",i));
         }
         sb.append("]");
         return sb.toString();
