@@ -5,6 +5,12 @@ public class PointDTO {
     private String y;
     private String r;
     private String username;
+    private Boolean hit;
+
+
+    public Boolean getHit() { return hit; }
+
+    public void setHit(Boolean hit) { this.hit = hit; }
 
     public String getX() {
         return x;

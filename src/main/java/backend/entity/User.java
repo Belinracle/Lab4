@@ -19,7 +19,7 @@ public class User {
     private String name;
     private String pass;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Point> points = new ArrayList<>();
 
     public User() { }

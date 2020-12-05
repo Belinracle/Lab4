@@ -10,14 +10,13 @@ export const pointFetches = {
             }
         )
     },
-    getUserPointsFetch: function (request) {
-        return fetch('http://localhost:9080/Lab4/users/login',
+    getUserPointsFetch: function (username) {
+        return fetch('http://localhost:9080/Lab4/points?username=1',
             {
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 method: "GET",
-                body: JSON.stringify(request)
             }
         )
     }

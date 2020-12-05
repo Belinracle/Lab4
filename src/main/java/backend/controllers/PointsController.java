@@ -23,22 +23,23 @@ public class PointsController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPoints(@QueryParam("username") String username) {
-        return Response.ok().entity(pointService.getPoints(username)).build();
+    public Response getPoints(@QueryParam("username") String username) throws Exception {
+        return Response.ok().entity(userService.findUserByName(username).getPoints()).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response postPoint(PointDTO pointDTO) {
-        System.out.println("дошло до точек");
+        Point point;
         try {
-            Point point = pointBuilder.createPoint(pointDTO.getX(), pointDTO.getY(), pointDTO.getR());
+            point = pointBuilder.createPoint(pointDTO.getX(), pointDTO.getY(), pointDTO.getR());
             userService.updateUser(pointDTO.getUsername(),point);
-            pointService.insertPoint(point);
         } catch (Exception e) {
             return Response.serverError().entity(e.getMessage()).build();
         }
-        return Response.ok().entity("Точка успешно добавлена").build();
+        pointDTO.setHit(point.getHit());
+        return Response.ok().entity(pointDTO).build();
     }
 
 }

@@ -45,8 +45,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     @Transactional
     public User update(String name, Point point) {
-        User user = getByName(name);
-        user.getPoints().add(point);
-        return user;
+        EntityManager em = entityManagerFactory.createEntityManager();
+        User prevUser = em.find(User.class, name);
+        point.setUser(prevUser);
+        prevUser.getPoints().add(point);
+        em.merge(prevUser);
+        return prevUser;
     }
 }
