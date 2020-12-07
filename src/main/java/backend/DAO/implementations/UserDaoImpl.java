@@ -41,15 +41,4 @@ public class UserDaoImpl implements UserDao {
         EntityManager em = entityManagerFactory.createEntityManager();
         return em.createNamedQuery(User.GET_BY_NAME,User.class).setParameter("name",name).getSingleResult();
     }
-
-    @Override
-    @Transactional
-    public User update(String name, Point point) {
-        EntityManager em = entityManagerFactory.createEntityManager();
-        User prevUser = em.find(User.class, name);
-        point.setUser(prevUser);
-        prevUser.getPoints().add(point);
-        em.merge(prevUser);
-        return prevUser;
-    }
 }

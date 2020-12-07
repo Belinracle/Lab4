@@ -10,13 +10,25 @@ export const pointFetches = {
             }
         )
     },
-    getUserPointsFetch: function (username) {
-        return fetch('http://localhost:9080/Lab4/points?username=1',
+    getUserPointsFetch: function (token) {
+        return fetch('http://localhost:9080/Lab4/points',
             {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+token
                 },
                 method: "GET",
+            }
+        )
+    },
+    deletePoints: function (token) {
+        return fetch('http://localhost:9080/Lab4/points',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+token
+                },
+                method: "DELETE",
             }
         )
     }

@@ -1,9 +1,16 @@
 <template>
   <div id="main" class="d-flex flex-column">
     <Header/>
-    <my-container/>
+    <my-container
+      :points="points"
+      @add-point="addPoint"
+      @clear-points="clear"
+    />
     <router-link to="/">start</router-link>
     <Footer/>
+<!--    <b-card class="mt-3" header="Form Data Result">-->
+<!--      <pre class="m-0">{{ points }}</pre>-->
+<!--    </b-card>-->
   </div>
 </template>
 
@@ -15,11 +22,16 @@ import {pointFetches} from "../resources/scripts/PointFetches";
 
 export default {
   name: "Main",
-  created() {
-    pointFetches.getUserPointsFetch(JSON.parse(atob(localStorage.getItem("jwt").split('.')[1])).sub)
+  data(){
+    return{
+      points:[]
+    }
+  },
+  beforeCreate() {
+    pointFetches.getUserPointsFetch(localStorage.getItem("jwt"))
         .then((response) => {
           if (response.ok) {
-            response.text().then(text => console.log(text));
+            response.json().then(json =>this.points=json)
           } else response.text().then(text => console.error(text));
         });
   },
@@ -27,6 +39,14 @@ export default {
     Header,
     Footer,
     myContainer
+  },
+  methods:{
+    addPoint:function (point){
+      this.points.push(point)
+    },
+    clear:function (){
+      this.points=[]
+    }
   }
 }
 </script>

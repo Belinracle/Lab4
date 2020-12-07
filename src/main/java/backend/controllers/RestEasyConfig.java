@@ -17,8 +17,8 @@ public class RestEasyConfig extends Application{
     public RestEasyConfig()
     {
         CorsFilter corsFilter = new CorsFilter();
-        corsFilter.getAllowedOrigins().add("*");
         corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
+        corsFilter.getAllowedOrigins().add("*");
         singletons.add(corsFilter);
 
         classes.add(UserController.class);

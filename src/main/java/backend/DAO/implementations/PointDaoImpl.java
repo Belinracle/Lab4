@@ -1,6 +1,7 @@
 package backend.DAO.implementations;
 import backend.DAO.interfaces.PointDao;
 import backend.entity.Point;
+import backend.entity.User;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -19,9 +20,9 @@ public class PointDaoImpl implements PointDao {
     public EntityManagerFactory entityManagerFactory;
 
     @Override
-    public List<Point> getPoints(String username) {
+    public List<Point> getPoints(User user) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        return (List<Point>)em.createQuery("SELECT all from points where username=?1").setParameter(1,username).getResultList();
+        return em.createNamedQuery(Point.GET_BY_USERNAME,Point.class).setParameter("user",user).getResultList();
     }
 
     @Transactional
@@ -30,5 +31,12 @@ public class PointDaoImpl implements PointDao {
         EntityManager em = entityManagerFactory.createEntityManager();
         em.persist(point);
         return point;
+    }
+
+    @Override
+    @Transactional
+    public void deletePoints(User user) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        em.createNamedQuery(Point.DELETE_BY_USERNAME).setParameter("user",user).executeUpdate();
     }
 }

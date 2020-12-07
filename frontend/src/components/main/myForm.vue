@@ -34,11 +34,9 @@
       </div>
       <div class="row">
         <b-button :disabled="!valid" @click=postPoint class="col" variant="success">Отправить</b-button>
-        <b-button class="col" variant="primary">Очистить</b-button>
+        <b-button @click="deletePoints" class="col" variant="primary">Очистить</b-button>
       </div>
       <b-card class="mt-3" header="Form Data Result">
-        <!--      <pre class="m-0">{{ form }}</pre>-->
-        <!--      <pre class="m-0">{{ errors }}</pre>-->
         <pre class="m-0">{{ valid }}</pre>
       </b-card>
     </form>
@@ -82,6 +80,7 @@ export default {
     },
     setR: function (e) {
       this.form.r_value = e.num;
+      this.$emit('r', e.num+'.0');
       this.validate_R()
     },
     validate_X: function () {
@@ -124,9 +123,23 @@ export default {
       pointFetches.postPointFetch(this.generateRequest())
           .then((response) => {
             if (response.ok) {
-              response.text().then(text => console.log(text));
+              response.json().then(json => this.addPoint(json));
             } else response.text().then(text => console.error(text));
           });
+    },
+    addPoint: function (point) {
+      this.$emit('add-point', point)
+    },
+    deletePoints: function () {
+      pointFetches.deletePoints(localStorage.getItem("jwt"))
+          .then((response) => {
+            if (response.ok) {
+              response.text().then(() =>this.clearPoints())
+            } else response.text().then(text => console.error(text));
+          });
+    },
+    clearPoints: function (){
+      this.$emit("clear-points")
     }
   },
 }

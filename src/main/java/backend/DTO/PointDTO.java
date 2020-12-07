@@ -1,5 +1,7 @@
 package backend.DTO;
 
+import backend.controllers.PointsController;
+
 public class PointDTO {
     private String x;
     private String y;
@@ -7,6 +9,15 @@ public class PointDTO {
     private String username;
     private Boolean hit;
 
+    public PointDTO(String x, String y, String r, String username, Boolean hit){
+        this.hit=hit;
+        this.r=r;
+        this.x=x;
+        this.username=username;
+        this.y=y;
+    }
+    public PointDTO(){
+    }
 
     public Boolean getHit() { return hit; }
 

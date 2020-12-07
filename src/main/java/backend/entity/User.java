@@ -19,9 +19,6 @@ public class User {
     private String name;
     private String pass;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Point> points = new ArrayList<>();
-
     public User() { }
     public User(String username,String usrPass){
         name=username;
@@ -30,9 +27,6 @@ public class User {
 
     public void setName(String name){this.name=name;}
     public void setPass(String pass){this.pass=pass;}
-    public void setPoints(List<Point> points) { this.points = points; }
-
-    public List<Point> getPoints() { return points; }
     public String getName(){return name;}
     public String getPass(){return pass;}
 }

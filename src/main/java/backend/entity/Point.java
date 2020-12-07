@@ -4,14 +4,24 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "points")
+@NamedQueries(
+        {
+                @NamedQuery(name= Point.GET_BY_USERNAME,query = Point.GET_BY_USERNAME_QUERY),
+                @NamedQuery(name= Point.DELETE_BY_USERNAME,query = Point.DELETE_BY_USERNAME_QUERY)
+        }
+)
 public class Point {
 
+    public static final String GET_BY_USERNAME = "GET_BY_USERNAME";
+    static final String GET_BY_USERNAME_QUERY = "SELECT point from Point point where point.user = :user";
+
+    public static final String DELETE_BY_USERNAME = "DELETE_BY_USERNAME";
+    static final String DELETE_BY_USERNAME_QUERY = "DELETE from Point point where point.user = :user";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "name")
+    @ManyToOne()
     private User user;
 
     private Double x;

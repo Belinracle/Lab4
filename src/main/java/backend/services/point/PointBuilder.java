@@ -27,7 +27,7 @@ public class PointBuilder {
             throw new Exception("Вы не ввели одно из необхбодимых данных (x,y,r)");
         }
         pointChecker.checkDoubleValueInInterval("Y",cy,-5D,3D);
-        pointChecker.checkDoubleValueInMassive("X",cx, Arrays.asList(-4D,-3D,-2D,-1D,0D,1D,2D,3D,4D));
+        pointChecker.checkDoubleValueInInterval("X",cx, -4D,4D);
         pointChecker.checkDoubleValueInMassive("R",cr, Arrays.asList(1D,2D,3D,4D));
         return new Point(cx,cy,cr, hitCalculator.calculate(cx,cy,cr));
     }
