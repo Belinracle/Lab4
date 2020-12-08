@@ -23,6 +23,7 @@ public class RestEasyConfig extends Application{
 
         classes.add(UserController.class);
         classes.add(PointsController.class);
+        classes.add(JWTTokenNeededFilter.class);
     }
 
     @Override

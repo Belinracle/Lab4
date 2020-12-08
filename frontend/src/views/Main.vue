@@ -1,16 +1,21 @@
 <template>
-  <div id="main" class="d-flex flex-column">
+  <div id="main" v-if="valid" class="d-flex flex-column">
     <Header/>
     <my-container
-      :points="points"
-      @add-point="addPoint"
-      @clear-points="clear"
+        :points="points"
+        @add-point="addPoint"
+        @clear-points="clear"
     />
-    <router-link to="/">start</router-link>
-    <Footer/>
-<!--    <b-card class="mt-3" header="Form Data Result">-->
-<!--      <pre class="m-0">{{ points }}</pre>-->
-<!--    </b-card>-->
+    <router-link class="text-center" to="/">
+      <button
+          @click="logOut"
+          class="btn btn-success p-1 btn-lg">To start page and Log out
+      </button>
+    </router-link>
+    <Footer class="m-3 p-3"/>
+<!--        <b-card class="mt-3" header="Form Data Result">-->
+<!--          <pre class="m-0">{{ points }}</pre>-->
+<!--        </b-card>-->
   </div>
 </template>
 
@@ -19,40 +24,64 @@ import Header from "../components/common/Header.vue";
 import Footer from "../components/common/Footer.vue";
 import myContainer from "../components/main/myContainer.vue";
 import {pointFetches} from "../resources/scripts/PointFetches";
+import {userFetches} from "../resources/scripts/UserFetches";
 
 export default {
   name: "Main",
-  data(){
-    return{
-      points:[]
+  data() {
+    return {
+      points: [],
+      valid:false
     }
   },
-  beforeCreate() {
-    pointFetches.getUserPointsFetch(localStorage.getItem("jwt"))
-        .then((response) => {
-          if (response.ok) {
-            response.json().then(json =>this.points=json)
-          } else response.text().then(text => console.error(text));
-        });
+  created() {
+    if (localStorage.getItem("jwt") == null) {
+      alert("Авторизируйся, чорт");
+      this.valid=false;
+    }else{
+      userFetches.checkFetch(localStorage.getItem("jwt")).then((response)=>{
+        console.log("Проверка токена");
+        if(response.ok){
+          console.log("токен заебись");
+          this.valid=true
+          pointFetches.getUserPointsFetch(localStorage.getItem("jwt"))
+              .then((response) => {
+                if (response.ok) {
+                  response.json().then(json => this.points = json)
+                } else response.text().then(text => console.error(text));
+              });
+        }
+        else{
+          alert("Неизвестный токен, пройдите авторизацию повторно");
+          this.valid=false;
+        }
+      })
+    }
   },
-  components:{
+  components: {
     Header,
     Footer,
     myContainer
-  },
-  methods:{
-    addPoint:function (point){
+  }
+  ,
+  methods: {
+    addPoint: function (point) {
       this.points.push(point)
-    },
-    clear:function (){
-      this.points=[]
+    }
+    ,
+    clear: function () {
+      this.points = []
+    }
+    ,
+    logOut: function () {
+      localStorage.removeItem("jwt")
     }
   }
 }
 </script>
 
 <style scoped>
-#main{
+#main {
   height: 100%;
 }
 </style>

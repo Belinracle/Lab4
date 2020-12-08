@@ -55,10 +55,10 @@ export default {
       if (this.login && this.password) {
         userFetches.registerFetch(this.request)
             .then((response) => {
-          if (response.ok) {
-            response.text().then(text => this.info = text);
-          } else response.text().then(text => this.errors.push(text));
-        });
+              if (response.ok) {
+                response.text().then(text => this.info = text);
+              } else response.text().then(text => this.errors.push(text));
+            });
       }
     },
     authorize: function () {
@@ -66,7 +66,9 @@ export default {
       if (this.login && this.password) {
         userFetches.loginFetch(this.request).then((response) => {
           if (response.ok) {
-            response.text().then(text => localStorage.setItem('jwt', text)).then(() => this.authorized = true);
+            response.text().then(text => localStorage.setItem('jwt', text))
+                .then(() => this.authorized = true)
+                .then(() => this.info = "Вы авторизованы как пользователь: "+JSON.parse(atob(localStorage.getItem("jwt").split('.')[1])).sub);
           } else response.text().then(text => this.errors.push(text));
         });
       }

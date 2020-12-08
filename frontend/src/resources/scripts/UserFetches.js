@@ -20,5 +20,16 @@ export const userFetches = {
                 body: JSON.stringify(request)
             }
         )
+    },
+    checkFetch: function(token){
+        return fetch('http://localhost:9080/Lab4/users/check',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+token
+                },
+                method: "GET",
+            }
+        )
     }
 }

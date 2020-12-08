@@ -36,15 +36,16 @@
         <b-button :disabled="!valid" @click=postPoint class="col" variant="success">Отправить</b-button>
         <b-button @click="deletePoints" class="col" variant="primary">Очистить</b-button>
       </div>
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ valid }}</pre>
-      </b-card>
+<!--      <b-card class="mt-3" header="Form Data Result">-->
+<!--        <pre class="m-0">{{ valid }}</pre>-->
+<!--      </b-card>-->
     </form>
   </div>
 </template>
 
 <script>
 import {pointFetches} from "../../resources/scripts/PointFetches";
+import router from "../../router";
 
 export default {
   name: "myForm",
@@ -120,11 +121,14 @@ export default {
       }
     },
     postPoint: function () {
-      pointFetches.postPointFetch(this.generateRequest())
+      pointFetches.postPointFetch(this.generateRequest(),localStorage.getItem("jwt"))
           .then((response) => {
             if (response.ok) {
               response.json().then(json => this.addPoint(json));
-            } else response.text().then(text => console.error(text));
+            } else if (response.status===401){
+              router.push('/')
+            }
+            else response.text().then(text => console.error(text));
           });
     },
     addPoint: function (point) {

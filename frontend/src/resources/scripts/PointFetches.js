@@ -1,9 +1,10 @@
 export const pointFetches = {
-    postPointFetch: function (request) {
+    postPointFetch: function (request, token) {
         return fetch('http://localhost:9080/Lab4/points',
             {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+token
                 },
                 method: "POST",
                 body: JSON.stringify(request)

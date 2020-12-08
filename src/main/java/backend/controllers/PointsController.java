@@ -71,6 +71,7 @@ public class PointsController {
             return Response.serverError().entity(e.getMessage()).build();
         }
         pointDTO.setHit(point.getHit());
+        pointDTO.setR(point.getR().toString());
         return Response.ok().entity(pointDTO).build();
     }
 

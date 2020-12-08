@@ -44,6 +44,7 @@
 
 <script>
 import {pointFetches} from "../../resources/scripts/PointFetches";
+import router from "../../router";
 
 export default {
   name: "myPicture",
@@ -54,14 +55,6 @@ export default {
       y_value: '',
     }
   },
-  created() {
-      let map = new Map();
-      map.set("1","one")
-      map.set("2","two")
-      map.set("3","three")
-      map.set("4","four")
-      map.set("5","five")
-  },
   methods: {
     computeX: function (x, r) {
       return 250 + x / r * 200;
@@ -71,6 +64,9 @@ export default {
     },
     handleClick: function (event) {
       let svg = this.$refs.svg
+      if(this.r===''){
+        alert("Выберите R")
+      }
       if (+this.r > 0) {
         let pt = svg.createSVGPoint();
         pt.x = event.clientX;
@@ -90,25 +86,30 @@ export default {
       }
     },
     postPoint: function (request) {
-      console.log(request)
-      pointFetches.postPointFetch(request)
+      // console.log(request)
+      pointFetches.postPointFetch(request,localStorage.getItem("jwt"))
           .then((response) => {
             if (response.ok) {
-              response.json().then(json => this.addPoint(json));
+              response.json().then(json => {
+                this.addPoint(json)
+                // console.log(json)
+              });
+            }else if (response.status===401){
+              router.push('/')
             } else response.text().then(text => console.error(text));
           });
     },
     addPoint: function (point) {
       this.$emit('add-point', point)
     },
-    computeClass: function (){
-
-    }
   }
 }
 </script>
 
 <style scoped>
+.image:hover{
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
 .hit {
   fill: #e20000;
 }
