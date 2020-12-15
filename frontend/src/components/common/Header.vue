@@ -1,15 +1,14 @@
 <template>
-  <div id="header" class="container-fluid">
-    <div class="row justify-content-between">
-      <div class="col-2">
+  <div id="header" class="w-100 bg-primary d-flex justify-content-between flex-wrap">
+      <div class="pt-1 pb-1 col text-white d-flex justify-content-start align-items-center">
+        Лабораторная работа №4 по веб-программированию <br/>
         Джукашев Даниэль
       </div>
-      <div class="text-right col-2">
+      <div class="pt-1 pb-1 col d-flex align-items-center justify-content-end align-content-center text-right text-white col">
         Вариант 2611
         <br>
         Р3230
       </div>
-    </div>
   </div>
 </template>
 
@@ -20,7 +19,4 @@ export default {
 </script>
 
 <style scoped>
-#header{
-  background-color: aqua;
-}
 </style>

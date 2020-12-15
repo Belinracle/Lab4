@@ -1,21 +1,22 @@
 <template>
   <div id="main" v-if="valid" class="d-flex flex-column">
-    <Header/>
+    <Header />
     <my-container
+        class="flex-grow-1"
         :points="points"
         @add-point="addPoint"
         @clear-points="clear"
     />
-    <router-link class="text-center" to="/">
-      <button
-          @click="logOut"
-          class="btn btn-success p-1 btn-lg">To start page and Log out
-      </button>
-    </router-link>
-    <Footer class="m-3 p-3"/>
-<!--        <b-card class="mt-3" header="Form Data Result">-->
-<!--          <pre class="m-0">{{ points }}</pre>-->
-<!--        </b-card>-->
+      <router-link class="text-center flex-grow-0" to="/">
+        <button
+            @click="logOut"
+            class="btn btn-success p-1 btn-lg">To start page and Log out
+        </button>
+      </router-link>
+    <Footer class="flex-grow-0"/>
+    <!--        <b-card class="mt-3" header="Form Data Result">-->
+    <!--          <pre class="m-0">{{ points }}</pre>-->
+    <!--        </b-card>-->
   </div>
 </template>
 
@@ -31,29 +32,28 @@ export default {
   data() {
     return {
       points: [],
-      valid:false
+      valid: false
     }
   },
   created() {
     if (localStorage.getItem("jwt") == null) {
       alert("Авторизируйся, чорт");
-      this.valid=false;
-    }else{
-      userFetches.checkFetch(localStorage.getItem("jwt")).then((response)=>{
+      this.valid = false;
+    } else {
+      userFetches.checkFetch(localStorage.getItem("jwt")).then((response) => {
         console.log("Проверка токена");
-        if(response.ok){
+        if (response.ok) {
           console.log("токен заебись");
-          this.valid=true
+          this.valid = true
           pointFetches.getUserPointsFetch(localStorage.getItem("jwt"))
               .then((response) => {
                 if (response.ok) {
                   response.json().then(json => this.points = json)
                 } else response.text().then(text => console.error(text));
               });
-        }
-        else{
+        } else {
           alert("Неизвестный токен, пройдите авторизацию повторно");
-          this.valid=false;
+          this.valid = false;
         }
       })
     }
@@ -80,8 +80,13 @@ export default {
 }
 </script>
 
-<style scoped>
-#main {
+<style>
+#main{
   height: 100%;
+  min-width: 520px;
+}
+html, body{
+  height: 100%;
+  min-width: 520px;
 }
 </style>

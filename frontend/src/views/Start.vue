@@ -1,8 +1,8 @@
 <template>
-  <div id="start" class="w-100  container-fluid d-flex flex-column min-vh-100">
-    <Header/>
-    <LoginForm/>
-    <Footer/>
+  <div id="start" class="container d-flex flex-column min-vh-100">
+    <Header class="flex-grow-0"/>
+    <LoginForm class="flex-grow-1"/>
+    <Footer class="flex-grow-0"/>
   </div>
 </template>
 
@@ -23,5 +23,10 @@ export default {
 <style>
 html, body{
   height: 100%;
+  min-width: 200px;
 }
+#start{
+  min-width: 200px!important;
+}
+
 </style>

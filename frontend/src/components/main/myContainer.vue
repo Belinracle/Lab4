@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid ">
+  <div class="container">
     <div class="row justify-content-center">
       <my-picture
           :r="r"
@@ -41,13 +41,10 @@ export default {
     },
     clearPoints:function (){
       this.$emit("clear-points")
-    }
+    },
   }
 }
 </script>
 
 <style scoped>
-div {
-
-}
 </style>

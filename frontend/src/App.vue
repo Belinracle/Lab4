@@ -6,10 +6,11 @@
 
 <style>
 #app{
-  min-width: 560px;
-  height: 100%;
-}
-body{
+  height:100%;
   width: 100%;
+  min-width: 200px;
+}
+html,body{
+  min-width: 200px;
 }
 </style>
