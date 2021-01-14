@@ -41,9 +41,7 @@ export default {
       this.valid = false;
     } else {
       userFetches.checkFetch(localStorage.getItem("jwt")).then((response) => {
-        console.log("Проверка токена");
         if (response.ok) {
-          console.log("токен заебись");
           this.valid = true
           pointFetches.getUserPointsFetch(localStorage.getItem("jwt"))
               .then((response) => {
@@ -55,7 +53,7 @@ export default {
           alert("Неизвестный токен, пройдите авторизацию повторно");
           this.valid = false;
         }
-      })
+      }).catch(() => alert("Ошибка сети, проверьте проброшенные порты"))
     }
   },
   components: {
@@ -86,7 +84,6 @@ export default {
   min-width: 520px;
 }
 html, body{
-  height: 100%;
-  min-width: 520px;
+  height:100%;
 }
 </style>

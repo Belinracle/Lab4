@@ -2,6 +2,8 @@
   <form class="container">
     <div class="row">
       <div class="form-group col-12 text-center">
+        <div>
+        </div>
         <div v-if="errors.length">
           <b>Пожалуйста исправьте ошибки: </b>
           <ul>
@@ -68,7 +70,7 @@ export default {
               if (response.ok) {
                 response.text().then(text => this.info = text);
               } else response.text().then(text => this.errors.push(text));
-            });
+            }).catch(() => alert("Ошибка сети, проверьте проброшенные порты"));
       }
     },
     authorize: function () {
@@ -80,7 +82,7 @@ export default {
                 .then(() => this.authorized = true)
                 .then(() => this.info = "Вы авторизованы как пользователь: " + JSON.parse(atob(localStorage.getItem("jwt").split('.')[1])).sub);
           } else response.text().then(text => this.errors.push(text));
-        });
+        }).catch(() => alert("Ошибка сети, проверьте проброшенные порты"));
       }
     },
 

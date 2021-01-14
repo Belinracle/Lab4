@@ -128,8 +128,8 @@ export default {
             } else if (response.status===401){
               router.push('/')
             }
-            else response.text().then(text => console.error(text));
-          });
+            else response.text().then(text => alert(text));
+          }).catch(() => alert("Ошибка сети, проверьте проброшенные порты"));
     },
     addPoint: function (point) {
       this.$emit('add-point', point)

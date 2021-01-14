@@ -1,7 +1,8 @@
 <template>
   <div class="col-auto">
     <svg ref="svg"
-        class="image"
+         class="image m-3"
+         :style="style"
          @click="handleClick"
          width="500"
          height="500"
@@ -36,21 +37,63 @@
         </circle>
       </g>
     </svg>
-<!--    <b-card class="mt-3" header="Form Data Result">-->
-<!--      <pre class="m-0">{{ r }}</pre>-->
-<!--    </b-card>-->
+    <!--    <b-card class="mt-3" header="Form Data Result">-->
+    <!--      <pre class="m-0">{{ r }}</pre>-->
+    <!--    </b-card>-->
+    <vue-slider
+        ref="slider"
+        v-model="value"
+        v-bind="options"
+    ></vue-slider>
   </div>
 </template>
 
 <script>
 import {pointFetches} from "../../resources/scripts/PointFetches";
 import router from "../../router";
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
 
 export default {
   name: "myPicture",
   props: ['points', 'r'],
+  components: {
+    VueSlider
+  },
+  computed: {
+    style() {
+      return {transform: 'rotate(' + this.value + 'deg)'}
+    }
+  },
   data() {
     return {
+      value: 0,
+      options: {
+        dotSize: 14,
+        width: 'auto',
+        height: 4,
+        contained: false,
+        direction: 'ltr',
+        data: null,
+        min: -180,
+        max: 180,
+        interval: 1,
+        disabled: false,
+        clickable: true,
+        duration: 0.5,
+        lazy: false,
+        tooltip: 'active',
+        tooltipPlacement: 'top',
+        tooltipFormatter: void 0,
+        useKeyboard: true,
+        keydownHook: null,
+        dragOnClick: false,
+        enableCross: true,
+        order: true,
+        marks: false,
+        dotOptions: void 0,
+        process: true,
+      },
       x_value: '',
       y_value: '',
     }
@@ -64,7 +107,7 @@ export default {
     },
     handleClick: function (event) {
       let svg = this.$refs.svg
-      if(this.r===''){
+      if (this.r === '') {
         alert("Выберите R")
       }
       if (+this.r > 0) {
@@ -86,18 +129,16 @@ export default {
       }
     },
     postPoint: function (request) {
-      // console.log(request)
-      pointFetches.postPointFetch(request,localStorage.getItem("jwt"))
+      pointFetches.postPointFetch(request, localStorage.getItem("jwt"))
           .then((response) => {
             if (response.ok) {
               response.json().then(json => {
                 this.addPoint(json)
-                // console.log(json)
               });
-            }else if (response.status===401){
+            } else if (response.status === 401) {
               router.push('/')
-            } else response.text().then(text => console.error(text));
-          });
+            } else response.text().then(text => alert(text));
+          }).catch(() => alert("Ошибка сети, проверьте проброшенные порты"));
     },
     addPoint: function (point) {
       this.$emit('add-point', point)
@@ -107,9 +148,10 @@ export default {
 </script>
 
 <style scoped>
-.image:hover{
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+.image:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
 .hit {
   fill: #e20000;
 }

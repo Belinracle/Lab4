@@ -21,12 +21,10 @@ export default {
 </script>
 
 <style>
-html, body{
-  height: 100%;
+#start{
   min-width: 200px;
 }
-#start{
-  min-width: 200px!important;
+html, body{
+  height:100%;
 }
-
 </style>
