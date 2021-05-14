@@ -60,8 +60,11 @@ public class PointsController {
     public Response getPoints(@HeaderParam("Authorization") String authorization) throws Exception {
         String token = authorization.substring("Bearer".length()).trim();
         Claims jwt = Jwts.parser().setSigningKey(keyGenerator.generateKey()).parseClaimsJws(token).getBody();
+        User user = userService.findUserByName(jwt.getSubject());
+        List<Point> points = pointService.getPoints(user);
+        pointManager.method(user.getName(),points);
         return Response.ok()
-                .entity(convertPointToDTO(pointService.getPoints(userService.findUserByName(jwt.getSubject()))))
+                .entity(convertPointToDTO(points))
                 .build();
     }
 
@@ -85,6 +88,16 @@ public class PointsController {
         } catch (Exception e) {
             return Response.serverError().entity(e.getMessage()).build();
         }
+    }
+
+    @Path("/profiling")
+    @POST
+    public void removeFromProfiling(@HeaderParam("Authorization") String authorization) throws Exception {
+        System.out.println("Удаление проверка");
+        String token = authorization.substring("Bearer".length()).trim();
+        Claims jwt = Jwts.parser().setSigningKey(keyGenerator.generateKey()).parseClaimsJws(token).getBody();
+        User user = userService.findUserByName(jwt.getSubject());
+        pointManager.removeUser(user.getName());
     }
 
     private List<PointDTO> convertPointToDTO(List<Point> points) {

@@ -34,7 +34,7 @@ public class AreaManager implements AreaManagerMBean, Serializable {
     @Override
     public void setR(String username, Double r) {
         Double square = r * r / 2 + 3.14 * r * r / 4 + r * r / 2 / 2;
-        usersFigureSquare.put(username, String.format("%s %s", square, "у.е"));
+        usersFigureSquare.put(username, String.format("%.3f %s", square, "у.е"));
         System.out.println("метод");
     }
 }

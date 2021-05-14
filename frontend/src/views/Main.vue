@@ -72,6 +72,7 @@ export default {
     }
     ,
     logOut: function () {
+      pointFetches.removeFromProfiling(localStorage.getItem("jwt"))
       localStorage.removeItem("jwt")
     }
   }
