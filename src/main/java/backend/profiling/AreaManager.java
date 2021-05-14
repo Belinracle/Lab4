@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 
 @Singleton
-public class SquareManager implements SquareManagerMBean, Serializable {
+public class AreaManager implements AreaManagerMBean, Serializable {
     HashMap<String, String> usersFigureSquare = null;
 
     @PostConstruct
@@ -27,7 +27,7 @@ public class SquareManager implements SquareManagerMBean, Serializable {
     }
 
     @Override
-    public HashMap<String, String> getUsersFigureSquare() {
+    public HashMap<String, String> getUsersFigureArea() {
         return usersFigureSquare;
     }
 

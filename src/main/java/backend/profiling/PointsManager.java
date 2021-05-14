@@ -52,6 +52,7 @@ public class PointsManager extends NotificationBroadcasterSupport implements Poi
         }
     }
 
+    @Override
     public void createANdPublishNotification() {
         Notification n =
                 new Notification("PointManagerNotification",

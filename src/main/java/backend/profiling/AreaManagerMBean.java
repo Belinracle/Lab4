@@ -2,7 +2,7 @@ package backend.profiling;
 
 import java.util.HashMap;
 
-public interface SquareManagerMBean {
-    HashMap<String, String> getUsersFigureSquare();
+public interface AreaManagerMBean {
+    HashMap<String, String> getUsersFigureArea();
     void setR(String username, Double r);
 }

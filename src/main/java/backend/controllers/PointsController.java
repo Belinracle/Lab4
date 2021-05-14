@@ -3,9 +3,10 @@ package backend.controllers;
 import backend.DTO.PointDTO;
 import backend.entity.Point;
 import backend.entity.User;
-import backend.exceptions.OutOfBoundariesException;
+import backend.profiling.AreaManager;
+import backend.profiling.AreaManagerMBean;
+import backend.profiling.PointsManager;
 import backend.profiling.PointsManagerMBean;
-import backend.profiling.SquareManagerMBean;
 import backend.services.PointService;
 import backend.services.UserService;
 import backend.services.point.PointBuilder;
@@ -25,9 +26,9 @@ import java.util.List;
 @Path("points")
 public class PointsController {
 
-    PointInVisibleAreaCalculator calculator = new PointInVisibleAreaCalculator();
+    private PointInVisibleAreaCalculator calculator = new PointInVisibleAreaCalculator();
     @EJB
-    SquareManagerMBean squareManager;
+    AreaManagerMBean areaManager;
     @EJB
     PointsManagerMBean pointManager;
     @EJB
@@ -75,7 +76,7 @@ public class PointsController {
             User user = userService.findUserByName(pointDTO.getUsername());
             pointManager.increasePointsCounter(user.getName(),point.getHit());
             if(!calculator.isVisible(point.getX(),point.getY(),point.getR()))pointManager.createANdPublishNotification();
-            squareManager.setR(user.getName(),point.getR());
+            areaManager.setR(user.getName(),point.getR());
             point.setUser(user);
             pointService.insertPoint(point);
             pointDTO.setHit(point.getHit());
