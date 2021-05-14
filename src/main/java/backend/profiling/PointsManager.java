@@ -1,8 +1,7 @@
 package backend.profiling;
 
-import backend.entity.Point;
-
 import javax.annotation.PostConstruct;
+import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
 import javax.management.MBeanServer;
 import javax.management.Notification;
@@ -13,6 +12,7 @@ import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 
 @Singleton
+@LocalBean
 public class PointsManager extends NotificationBroadcasterSupport implements PointsManagerMBean, Serializable {
     private HashMap<String, Long> usersPointsCount = null;
     private HashMap<String, Long> usersMisses = null;
@@ -41,14 +41,11 @@ public class PointsManager extends NotificationBroadcasterSupport implements Poi
         return usersMisses;
     }
 
-    @Override
     public void initUserInMBean(String username, long total, long misses) {
         usersPointsCount.putIfAbsent(username, total);
         usersMisses.putIfAbsent(username, misses);
     }
 
-
-    @Override
     public void increasePointsCounter(String username, boolean hit) {
         usersPointsCount.put(username, usersPointsCount.get(username) + 1);
         if (!hit) {
@@ -56,7 +53,6 @@ public class PointsManager extends NotificationBroadcasterSupport implements Poi
         }
     }
 
-    @Override
     public void notifyAboutInvisiblePoint() {
         Notification n =
                 new Notification("PointManagerNotification",
@@ -67,7 +63,6 @@ public class PointsManager extends NotificationBroadcasterSupport implements Poi
         sendNotification(n);
     }
 
-    @Override
     public void removeUser(String username) {
         usersPointsCount.remove(username);
         usersMisses.remove(username);

@@ -1,7 +1,9 @@
 package backend.controllers;
 
 import backend.entity.User;
+import backend.profiling.AreaManager;
 import backend.profiling.AreaManagerMBean;
+import backend.profiling.PointsManager;
 import backend.profiling.PointsManagerMBean;
 import backend.services.TokenService;
 import backend.services.UserService;
@@ -23,9 +25,9 @@ public class UserController {
     @EJB
     TokenService tokenService;
     @EJB
-    PointsManagerMBean pointManager;
+    PointsManager pointManager;
     @EJB
-    AreaManagerMBean areaManager;
+    AreaManager areaManager;
     @EJB
     KeyGenerator keyGenerator;
 

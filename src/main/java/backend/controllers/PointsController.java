@@ -3,7 +3,9 @@ package backend.controllers;
 import backend.DTO.PointDTO;
 import backend.entity.Point;
 import backend.entity.User;
+import backend.profiling.AreaManager;
 import backend.profiling.AreaManagerMBean;
+import backend.profiling.PointsManager;
 import backend.profiling.PointsManagerMBean;
 import backend.services.PointService;
 import backend.services.UserService;
@@ -20,16 +22,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Path("points")
 public class PointsController {
 
     private PointInVisibleAreaCalculator calculator = new PointInVisibleAreaCalculator();
     @EJB
-    AreaManagerMBean areaManager;
+    AreaManager areaManager;
     @EJB
-    PointsManagerMBean pointManager;
+    PointsManager pointManager;
     @EJB
     PointService pointService;
     @EJB
@@ -79,7 +80,7 @@ public class PointsController {
             pointManager.increasePointsCounter(user.getName(), point.getHit());
             if (!calculator.isVisible(point.getX(), point.getY(), point.getR()))
                 pointManager.notifyAboutInvisiblePoint();
-            areaManager.setR(user.getName(), point.getR());
+            areaManager.setArea(user.getName(), point.getR());
             point.setUser(user);
             pointService.insertPoint(point);
             pointDTO.setHit(point.getHit());
