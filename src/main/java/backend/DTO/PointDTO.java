@@ -1,7 +1,5 @@
 package backend.DTO;
 
-import backend.controllers.PointsController;
-
 public class PointDTO {
     private String x;
     private String y;

@@ -3,9 +3,13 @@ package backend.controllers;
 import backend.DTO.PointDTO;
 import backend.entity.Point;
 import backend.entity.User;
+import backend.exceptions.OutOfBoundariesException;
+import backend.profiling.PointsManagerMBean;
+import backend.profiling.SquareManagerMBean;
 import backend.services.PointService;
 import backend.services.UserService;
 import backend.services.point.PointBuilder;
+import backend.services.point.PointInVisibleAreaCalculator;
 import backend.utils.JWTTokenNeeded;
 import backend.utils.KeyGenerator;
 import io.jsonwebtoken.Claims;
@@ -21,6 +25,11 @@ import java.util.List;
 @Path("points")
 public class PointsController {
 
+    PointInVisibleAreaCalculator calculator = new PointInVisibleAreaCalculator();
+    @EJB
+    SquareManagerMBean squareManager;
+    @EJB
+    PointsManagerMBean pointManager;
     @EJB
     PointService pointService;
     @EJB
@@ -64,15 +73,17 @@ public class PointsController {
         try {
             point = pointBuilder.createPoint(pointDTO.getX(), pointDTO.getY(), pointDTO.getR());
             User user = userService.findUserByName(pointDTO.getUsername());
-            System.out.println(user.getName()+user.getPass());
+            pointManager.increasePointsCounter(user.getName(),point.getHit());
+            if(!calculator.isVisible(point.getX(),point.getY(),point.getR()))pointManager.createANdPublishNotification();
+            squareManager.setR(user.getName(),point.getR());
             point.setUser(user);
             pointService.insertPoint(point);
+            pointDTO.setHit(point.getHit());
+            pointDTO.setR(point.getR().toString());
+            return Response.ok().entity(pointDTO).build();
         } catch (Exception e) {
             return Response.serverError().entity(e.getMessage()).build();
         }
-        pointDTO.setHit(point.getHit());
-        pointDTO.setR(point.getR().toString());
-        return Response.ok().entity(pointDTO).build();
     }
 
     private List<PointDTO> convertPointToDTO(List<Point> points) {

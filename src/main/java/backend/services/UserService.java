@@ -40,7 +40,4 @@ public class UserService {
         if (!user.getPass().equals(password)) throw new Exception("Пароли не совпадают");
     }
 
-//    public void updateUser(String name, Point point){
-//        userDao.update(name,point);
-//    }
 }

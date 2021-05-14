@@ -24,7 +24,7 @@ public class PointBuilder {
         }catch(NumberFormatException ex1){
             throw new Exception("Введенное вами значение не может быть приведено к типу Double");
         }catch (NullPointerException ex2){
-            throw new Exception("Вы не ввели одно из необхбодимых данных (x,y,r)");
+            throw new Exception("Вы не ввели одно из необходимых данных (x,y,r)");
         }
         pointChecker.checkDoubleValueInInterval("Y",cy,-5D,3D);
         pointChecker.checkDoubleValueInInterval("X",cx, -4D,4D);
