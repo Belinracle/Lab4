@@ -32,16 +32,5 @@ export const pointFetches = {
                 method: "DELETE",
             }
         )
-    },
-    removeFromProfiling: function (token) {
-        return fetch('http://localhost:9080/Lab4/points/profiling',
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer '+token
-                },
-                method: "POST",
-            }
-        )
     }
 }

@@ -11,14 +11,12 @@ import javax.management.ObjectName;
 import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.util.HashMap;
-import java.util.List;
-
 
 @Singleton
 public class PointsManager extends NotificationBroadcasterSupport implements PointsManagerMBean, Serializable {
-    HashMap<String, Integer> usersPointsCount = null;
-    HashMap<String, Integer> usersMisses = null;
-    int notificationCounter = 1;
+    private HashMap<String, Long> usersPointsCount = null;
+    private HashMap<String, Long> usersMisses = null;
+    private int notificationCounter = 1;
 
     @PostConstruct
     public void init() {
@@ -34,44 +32,38 @@ public class PointsManager extends NotificationBroadcasterSupport implements Poi
     }
 
     @Override
-    public HashMap<String, Integer> getUsersPointsCount() {
+    public HashMap<String, Long> getUsersPointsCount() {
         return usersPointsCount;
     }
 
     @Override
-    public HashMap<String, Integer> getUsersMisses() {
+    public HashMap<String, Long> getUsersMisses() {
         return usersMisses;
     }
 
     @Override
-    public void method(String username, List<Point> points) {
-        for (int i = 0; i < points.size(); i++) {
-            increasePointsCounter(username, points.get(i).getHit());
-        }
+    public void initUserInMBean(String username, long total, long misses) {
+        usersPointsCount.putIfAbsent(username, total);
+        usersMisses.putIfAbsent(username, misses);
     }
 
 
     @Override
     public void increasePointsCounter(String username, boolean hit) {
-        if (!usersPointsCount.containsKey(username)) {
-            usersPointsCount.put(username, 0);
-        }
         usersPointsCount.put(username, usersPointsCount.get(username) + 1);
         if (!hit) {
-            if (!usersMisses.containsKey(username)) {
-                usersMisses.put(username, 0);
-            }
             usersMisses.put(username, usersMisses.get(username) + 1);
         }
     }
 
     @Override
-    public void createANdPublishNotification() {
+    public void notifyAboutInvisiblePoint() {
         Notification n =
                 new Notification("PointManagerNotification",
                         this,
                         notificationCounter++,
-                        System.currentTimeMillis());
+                        System.currentTimeMillis(),
+                        "Point is not visible");
         sendNotification(n);
     }
 

@@ -1,9 +1,14 @@
 package backend.controllers;
 
 import backend.entity.User;
+import backend.profiling.AreaManagerMBean;
+import backend.profiling.PointsManagerMBean;
 import backend.services.TokenService;
 import backend.services.UserService;
 import backend.utils.JWTTokenNeeded;
+import backend.utils.KeyGenerator;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -17,6 +22,12 @@ public class UserController {
     UserService userService;
     @EJB
     TokenService tokenService;
+    @EJB
+    PointsManagerMBean pointManager;
+    @EJB
+    AreaManagerMBean areaManager;
+    @EJB
+    KeyGenerator keyGenerator;
 
     @POST
     public Response insertUser(User user) {
@@ -46,5 +57,16 @@ public class UserController {
     public Response jwtCheck() {
         System.out.println("проверка пользователя");
         return Response.ok("проверка на токен прошла").build();
+    }
+
+    @Path("/logout")
+    @POST
+    public void logout(@HeaderParam("Authorization") String authorization) throws Exception {
+        System.out.println("Удаление проверка");
+        String token = authorization.substring("Bearer".length()).trim();
+        Claims jwt = Jwts.parser().setSigningKey(keyGenerator.generateKey()).parseClaimsJws(token).getBody();
+        User user = userService.findUserByName(jwt.getSubject());
+        pointManager.removeUser(user.getName());
+        areaManager.removeUser(user.getName());
     }
 }

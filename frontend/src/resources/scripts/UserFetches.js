@@ -31,5 +31,16 @@ export const userFetches = {
                 method: "GET",
             }
         )
+    },
+    logout: function (token) {
+        return fetch('http://localhost:9080/Lab4/users/logout',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+token
+                },
+                method: "POST",
+            }
+        )
     }
 }

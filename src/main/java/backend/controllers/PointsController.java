@@ -3,9 +3,7 @@ package backend.controllers;
 import backend.DTO.PointDTO;
 import backend.entity.Point;
 import backend.entity.User;
-import backend.profiling.AreaManager;
 import backend.profiling.AreaManagerMBean;
-import backend.profiling.PointsManager;
 import backend.profiling.PointsManagerMBean;
 import backend.services.PointService;
 import backend.services.UserService;
@@ -22,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Path("points")
 public class PointsController {
@@ -42,13 +41,13 @@ public class PointsController {
 
     @DELETE
     @JWTTokenNeeded
-    public Response deletePoints(@HeaderParam("Authorization") String authorization){
+    public Response deletePoints(@HeaderParam("Authorization") String authorization) {
         String token = authorization.substring("Bearer".length()).trim();
         Claims jwt = Jwts.parser().setSigningKey(keyGenerator.generateKey()).parseClaimsJws(token).getBody();
-        try{
+        try {
             pointService.deletePoints(userService.findUserByName(jwt.getSubject()));
             return Response.ok().entity("точки удалены").build();
-        }catch(Exception e){
+        } catch (Exception e) {
             return Response.serverError().entity(e.getMessage()).build();
         }
     }
@@ -62,7 +61,7 @@ public class PointsController {
         Claims jwt = Jwts.parser().setSigningKey(keyGenerator.generateKey()).parseClaimsJws(token).getBody();
         User user = userService.findUserByName(jwt.getSubject());
         List<Point> points = pointService.getPoints(user);
-        pointManager.method(user.getName(),points);
+        pointManager.initUserInMBean(user.getName(), points.size(), points.stream().filter(e -> !e.getHit()).count());
         return Response.ok()
                 .entity(convertPointToDTO(points))
                 .build();
@@ -77,9 +76,10 @@ public class PointsController {
         try {
             point = pointBuilder.createPoint(pointDTO.getX(), pointDTO.getY(), pointDTO.getR());
             User user = userService.findUserByName(pointDTO.getUsername());
-            pointManager.increasePointsCounter(user.getName(),point.getHit());
-            if(!calculator.isVisible(point.getX(),point.getY(),point.getR()))pointManager.createANdPublishNotification();
-            areaManager.setR(user.getName(),point.getR());
+            pointManager.increasePointsCounter(user.getName(), point.getHit());
+            if (!calculator.isVisible(point.getX(), point.getY(), point.getR()))
+                pointManager.notifyAboutInvisiblePoint();
+            areaManager.setR(user.getName(), point.getR());
             point.setUser(user);
             pointService.insertPoint(point);
             pointDTO.setHit(point.getHit());
@@ -90,20 +90,10 @@ public class PointsController {
         }
     }
 
-    @Path("/profiling")
-    @POST
-    public void removeFromProfiling(@HeaderParam("Authorization") String authorization) throws Exception {
-        System.out.println("Удаление проверка");
-        String token = authorization.substring("Bearer".length()).trim();
-        Claims jwt = Jwts.parser().setSigningKey(keyGenerator.generateKey()).parseClaimsJws(token).getBody();
-        User user = userService.findUserByName(jwt.getSubject());
-        pointManager.removeUser(user.getName());
-    }
-
     private List<PointDTO> convertPointToDTO(List<Point> points) {
         List<PointDTO> dtos = new ArrayList<>();
         for (Point point : points) {
-            dtos.add(new PointDTO(point.getX().toString(), point.getY().toString(), point.getR().toString(),null, point.getHit()));
+            dtos.add(new PointDTO(point.getX().toString(), point.getY().toString(), point.getR().toString(), null, point.getHit()));
         }
         return dtos;
     }

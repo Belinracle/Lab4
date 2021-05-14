@@ -1,7 +1,6 @@
 /target/
 .idea
 pom.xml
-*.png
 *.docx
 *.iml
 *.pdf

@@ -37,4 +37,9 @@ public class AreaManager implements AreaManagerMBean, Serializable {
         usersFigureSquare.put(username, String.format("%.3f %s", square, "у.е"));
         System.out.println("метод");
     }
+
+    @Override
+    public void removeUser(String username) {
+        usersFigureSquare.remove(username);
+    }
 }
