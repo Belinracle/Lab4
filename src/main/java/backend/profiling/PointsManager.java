@@ -7,15 +7,16 @@ import javax.management.MBeanServer;
 import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
 import javax.management.ObjectName;
-import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 
 @Singleton
 @LocalBean
-public class PointsManager extends NotificationBroadcasterSupport implements PointsManagerMBean, Serializable {
+public class PointsManager extends NotificationBroadcasterSupport implements PointsManagerMBean {
     private HashMap<String, Long> usersPointsCount = null;
     private HashMap<String, Long> usersMisses = null;
+    private long allPointsSinceStartup = 0;
+    private long allMissesSinceStartup = 0;
     private int notificationCounter = 1;
 
     @PostConstruct
@@ -41,6 +42,16 @@ public class PointsManager extends NotificationBroadcasterSupport implements Poi
         return usersMisses;
     }
 
+    @Override
+    public long getAllPointsSinceStartup() {
+        return allPointsSinceStartup;
+    }
+
+    @Override
+    public long getAllMissesSinceStartup() {
+        return allMissesSinceStartup;
+    }
+
     public void initUserInMBean(String username, long total, long misses) {
         usersPointsCount.putIfAbsent(username, total);
         usersMisses.putIfAbsent(username, misses);
@@ -48,8 +59,10 @@ public class PointsManager extends NotificationBroadcasterSupport implements Poi
 
     public void increasePointsCounter(String username, boolean hit) {
         usersPointsCount.put(username, usersPointsCount.get(username) + 1);
+        allPointsSinceStartup++;
         if (!hit) {
             usersMisses.put(username, usersMisses.get(username) + 1);
+            allMissesSinceStartup++;
         }
     }
 

@@ -5,14 +5,13 @@ import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 
 
 @Singleton
 @LocalBean
-public class AreaManager implements AreaManagerMBean, Serializable {
+public class AreaManager implements AreaManagerMBean {
     private HashMap<String, String> usersFigureSquare = null;
 
     @PostConstruct
